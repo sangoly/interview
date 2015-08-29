@@ -14,7 +14,7 @@ void test1()
     const std::string& a = parser.Get("a", NULL);
     assert(a == "1");
 
-    std::string b = parser.Get("a", NULL);
+    std::string b = parser.Get("b", NULL);
     assert(b == "2");
 
     const std::string& c = parser.Get("c", NULL);
@@ -32,7 +32,7 @@ void test2()
     const std::string& a = parser.Get("a", NULL);
     assert(a == "1");
 
-    std::string b = parser.Get("a", NULL);
+    std::string b = parser.Get("b", NULL);
     assert(b == "2");
 
     const std::string& c = parser.Get("c", NULL);
@@ -50,11 +50,31 @@ void test3()
     const std::string& a = parser.Get("a", NULL);
     assert(a == "1");
 
-    std::string b = parser.Get("a", NULL);
+    std::string b = parser.Get("b", NULL);
     assert(b == "2");
 
     const std::string& c = parser.Get("c", NULL);
     assert(c == "3");
+}
+
+void test4() {
+    std::string file_path = "section.ini";
+    qh::INIParser parser;
+    if (!parser.Parse(file_path)) {
+        assert(false);
+    }
+
+    const std::string& a = parser.Get("p1", NULL);
+    assert(a == "1");
+
+    const std::string& b = parser.Get("p2", NULL);
+    assert(b == "2");
+
+    const std::string& c = parser.Get("section1", "p3", NULL);
+    assert(c == "4");
+
+    const std::string& d = parser.Get("section1", "p4", NULL);
+    assert(d == "6");
 }
 
 int main(int argc, char* argv[])
@@ -64,6 +84,7 @@ int main(int argc, char* argv[])
     test1();
     test2();
     test3();
+    test4();
 
     return 0;
 }

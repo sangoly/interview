@@ -2,6 +2,7 @@
 #define QIHOO_INI_PARSER_H_
 
 #include <string>
+#include <map>
 
 namespace qh
 {
@@ -9,7 +10,8 @@ namespace qh
     {
     public:
         INIParser();
-        ~INIParser();
+        // Change to virtual because destory this class may be inherit by other class, it's a good habit
+        virtual ~INIParser();
 
         //! \brief 解析一个磁盘上的INI文件
         //! \param[in] - const std::string & ini_file_path
@@ -37,6 +39,33 @@ namespace qh
         const std::string& Get(const std::string& section, const std::string& key, bool* found);
 
     private:
+        // Helper functions
+        bool ParseLines(std::string& lines, const std::string& line_seperator, const std::string& key_value_seperator);
+
+        void TrimLine(std::string& line, const std::string& symbol, bool all = true) const;
+
+        void TrimLineComment(std::string& line, const std::string& comment_symbol) const;
+
+        bool ParseProperty(std::string& property, const std::string& key_value_seperator);
+
+        std::string GetSectionName(std::string& section_line, const std::string& begin_symbol, const std::string& end_symbol);
+        
+
+        // Symbols of comment and section
+        const std::string comment_symbol;
+        
+        const std::string section_start_symbol;
+
+        const std::string section_end_symbol;
+       
+        const std::string default_retVal;
+
+        // Fields
+        std::string curr_active_section;
+        
+        std::map<std::string, std::string> global_key_value_map;
+
+        std::map<std::string, std::map<std::string, std::string> > section_key_value_map;
     };
 }
 
